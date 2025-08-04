@@ -18,6 +18,7 @@ import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../styles/globalStyles";
 
+
 const TodoScreen = () => {
 
   const [text, setText] = useState("");
@@ -30,6 +31,8 @@ const TodoScreen = () => {
   const isDarkMode = useColorScheme() === "dark";
 
   const todos = useSelector((state: RootState) => state.todo.todos);
+  //const { data: todos = [], isLoading, isError } = useGetTodosQuery();
+
   const dispatch = useDispatch();
 
   // const handleAdd = () => {
@@ -91,54 +94,54 @@ const TodoScreen = () => {
           </TouchableOpacity>
         </View>
 
+       <FlatList
+            data={todos}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
 
-        <FlatList
-          data={todos}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 21,
+                  alignItems: "center",
+                  marginVertical: 9,
+                  backgroundColor: item.completed ? "#d4edda" : "#f8d7da",
+                  borderRadius: 8,
+                }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity onPress={() => dispatch(toggleTodo(item.id))}>
+                    <MaterialCommunityIcons
+                      name={item.completed ? "checkbox-marked" : "checkbox-blank-outline"}
+                      size={24}
+                      color={item.completed ? "green" : "gray"}
+                      style={{ marginRight: 10 }}
+                    />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      textDecorationLine: item.completed ? "line-through" : "none",
+                      fontSize: 16,
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+                </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                padding: 21,
-                alignItems: "center",
-                marginVertical: 9,
-                backgroundColor: item.completed ? "#d4edda" : "#f8d7da",
-                borderRadius: 8,
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => dispatch(toggleTodo(item.id))}>
-                  <MaterialCommunityIcons
-                    name={item.completed ? "checkbox-marked" : "checkbox-blank-outline"}
-                    size={24}
-                    color={item.completed ? "green" : "gray"}
-                    style={{ marginRight: 10 }}
-                  />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    textDecorationLine: item.completed ? "line-through" : "none",
-                    fontSize: 16,
-                  }}
-                >
-                  {item.title}
-                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+                  <TouchableOpacity onPress={() => startEditing(item)}>
+                    <MaterialCommunityIcons name="pencil" size={23} color="blue" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => dispatch(deleteTodo(item.id))}>
+                    <MaterialCommunityIcons name="delete" size={23} color="red" />
+                  </TouchableOpacity>
+                </View>
               </View>
 
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-                <TouchableOpacity onPress={() => startEditing(item)}>
-                  <MaterialCommunityIcons name="pencil" size={23} color="blue" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => dispatch(deleteTodo(item.id))}>
-                  <MaterialCommunityIcons name="delete" size={23} color="red" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-          )}
-        />
+            )}
+          />
+         
       </View>
 
       <Modal visible={modalVisible} animationType="slide" transparent>
@@ -166,4 +169,3 @@ const TodoScreen = () => {
 export default TodoScreen;
 
 
-      
