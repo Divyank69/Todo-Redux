@@ -14,9 +14,9 @@ import {
 
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../app/store";
-import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../features/todo/todoSlice";
-import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../features/ui/uiSlice";
+import { RootState } from "../redux";
+import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices/todoSlice";
+import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices/uiSlice";
 import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
