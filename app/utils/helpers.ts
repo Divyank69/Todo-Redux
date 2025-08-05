@@ -8,3 +8,4 @@ import {
 } from 'react-native-responsive-dimensions';
 
 export { hp, wp, fp };
+

@@ -11,9 +11,12 @@ import {
   StatusBar,
 } from "react-native";
 
+import { useEffect } from "react";
+import { fetchTodos } from "../redux/slices/todoSlice";
 
 
-import { useSelector, useDispatch } from "react-redux";
+//import { useAppSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from '../redux';
 import { RootState } from "../redux";
 import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices/todoSlice";
 import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices/uiSlice";
@@ -25,32 +28,25 @@ import styles from "../styles/globalStyles";
 
 const TodoScreen = () => {
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const text = useSelector((state: RootState) => state.ui.text);
-  const modalVisible = useSelector((state: RootState) => state.ui.modalVisible);
-  const isEditing = useSelector((state: RootState) => state.ui.isEditing);
-  const editingId = useSelector((state: RootState) => state.ui.editingId);
+  const text = useAppSelector((state: RootState) => state.ui.text);
+  const modalVisible = useAppSelector((state: RootState) => state.ui.modalVisible);
+  const isEditing = useAppSelector((state: RootState) => state.ui.isEditing);
+  const editingId = useAppSelector((state: RootState) => state.ui.editingId);
 
 
-  const todos = useSelector((state: RootState) => state.todo.todos);
+  //const todos = useAppSelector((state: RootState) => state.todo.todos);
+  const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
+
   const isDarkMode = useColorScheme() === "dark";
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, [dispatch]);
+
 
   //const { data: todos = [], isLoading, isError } = useGetTodosQuery();
 
-
-
-  // const handleAdd = () => {
-  //   if (text.trim() === "") return;
-  //   const newTodo: Todo = {
-  //     id: generateId(),
-  //     title: text,
-  //     completed: false,
-  //   };
-  //   dispatch(addTodo(newTodo));
-  //   setText("");
-  //   setModalVisible(false);
-  // };
 
   const handleSave = () => {
     if (text.trim() === "") return;
