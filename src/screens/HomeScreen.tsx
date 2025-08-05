@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TextInput,
@@ -10,6 +10,9 @@ import {
   SafeAreaView,
   StatusBar,
 } from "react-native";
+
+
+
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../app/store";
 import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../features/todo/todoSlice";
@@ -79,13 +82,7 @@ const TodoScreen = () => {
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View style={{ flex: 1, padding: 20, paddingTop: 60 }}>
-        <View style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingHorizontal: 1,
-          padding: 10
-        }}>
+        <View style={styles.todaystask}>
           <Text style={{ fontSize: 24, fontWeight: "bold" }}> Today's Tasks</Text>
 
           <TouchableOpacity style={[styles.addButton, { position: 'relative', right: 0 }]} onPress={() => dispatch(setModalVisible(true))}>
