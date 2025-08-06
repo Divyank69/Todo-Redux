@@ -1,8 +1,13 @@
 import { StyleSheet } from "react-native";
-import { hp,wp,fp } from "../utils/helpers";
+import { hp, wp, fp } from "../utils/helpers";
 import Colors from "../constants/colors";
 
 const styles = StyleSheet.create({
+
+  safeareview: {
+    flex: 1,
+    backgroundColor: Colors.white
+  },
   addButton: {
     position: "absolute",
     top: hp(0.2),
@@ -13,7 +18,10 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
+    elevation: 5
+  }, addButtonWrapper: {
+    position: 'relative',
+    right: 0
   },
   addButtonText: {
     color: "#fff",
@@ -42,13 +50,56 @@ const styles = StyleSheet.create({
     minHeight: hp(10),
     textAlignVertical: "top"
 
-  }, todaystask: {
+  },
+
+  todaystask: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: wp(1),
     paddingVertical: hp(1.5)
-  }
+  },
+  todaystasktext: {
+    fontSize: fp(3.2),
+    fontWeight: "bold"
+  },
+  header: {
+    flex: 1,
+    padding: wp(5),
+    paddingTop: hp(6)
+  },
+  todoItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: hp(2.4),
+    alignItems: "center",
+    marginVertical: hp(1.1),
+    borderRadius: wp(2),
+  },
+
+  todoLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  todoRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: wp(5),
+  },
+
+  checkboxIcon: {
+    marginRight: wp(2.5),
+  },
+
+  todoText: {
+    fontSize: fp(2.2),
+  },
+
+  todoTextCompleted: {
+    textDecorationLine: "line-through",
+  },
+
 });
 
 export default styles;

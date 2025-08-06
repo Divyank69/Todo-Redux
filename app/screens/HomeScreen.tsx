@@ -1,12 +1,9 @@
 import React from "react";
 import {
   View,
-  TextInput,
-  Button,
   FlatList,
   Text,
   TouchableOpacity,
-  Modal,
   SafeAreaView,
   StatusBar,
 } from "react-native";
@@ -25,19 +22,18 @@ import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../styles/globalStyles";
-import CustomButton from "../components/CustomButton";
+//import CustomButton from "../components/CustomButton";
 import Colors from "../constants/colors";
+import CustomModal from "../components/CustomModal";
+import CustomText from "../components/CustomText";
 
 
 const TodoScreen = () => {
 
   const dispatch = useAppDispatch();
-
   const text = useAppSelector((state: RootState) => state.ui.text);
-  const modalVisible = useAppSelector((state: RootState) => state.ui.modalVisible);
   const isEditing = useAppSelector((state: RootState) => state.ui.isEditing);
   const editingId = useAppSelector((state: RootState) => state.ui.editingId);
-
 
   //const todos = useAppSelector((state: RootState) => state.todo.todos);
   const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
@@ -46,9 +42,6 @@ const TodoScreen = () => {
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
-
-
-  //const { data: todos = [], isLoading, isError } = useGetTodosQuery();
 
 
   const handleSave = () => {
@@ -80,36 +73,28 @@ const TodoScreen = () => {
   const renderTodo = ({ item }: { item: Todo }) => {
     return (
       <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 21,
-          alignItems: "center",
-          marginVertical: 9,
-          backgroundColor: item.completed ? Colors.lightGreenBg : Colors.lightRedBg,
-          borderRadius: 8,
-        }}
+        style={[styles.todoItem, { backgroundColor: item.completed ? Colors.lightGreenBg : Colors.lightRedBg }]}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={styles.todoLeft}>
           <TouchableOpacity onPress={() => dispatch(toggleTodo(item.id))}>
             <MaterialCommunityIcons
               name={item.completed ? "checkbox-marked" : "checkbox-blank-outline"}
               size={24}
               color={item.completed ? "green" : "gray"}
-              style={{ marginRight: 10 }}
+              style={styles.checkboxIcon}
             />
           </TouchableOpacity>
-          <Text
-            style={{
-              textDecorationLine: item.completed ? "line-through" : "none",
-              fontSize: 16,
-            }}
+          <CustomText
+            style={[
+              styles.todoText,
+              item.completed ? styles.todoTextCompleted : null ,
+            ]}
           >
             {item.title}
-          </Text>
+          </CustomText>
         </View>
 
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+        <View style={styles.todoRight}>
           <TouchableOpacity onPress={() => startEditing(item)}>
             <MaterialCommunityIcons name="pencil" size={23} color="blue" />
           </TouchableOpacity>
@@ -122,15 +107,15 @@ const TodoScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={styles.safeareview}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
-      <View style={{ flex: 1, padding: 20, paddingTop: 60 }}>
+      <View style={styles.header}>
         <View style={styles.todaystask}>
-          <Text style={{ fontSize: 24, fontWeight: "bold" }}> Today's Tasks</Text>
+          <CustomText style={styles.todaystasktext}> Today's Tasks</CustomText>
 
-          <TouchableOpacity style={[styles.addButton, { position: 'relative', right: 0 }]} onPress={() => dispatch(setModalVisible(true))}>
-            <Text style={styles.addButtonText}>＋</Text>
+          <TouchableOpacity style={[styles.addButton, styles.addButtonWrapper]} onPress={() => dispatch(setModalVisible(true))}>
+            <CustomText style={styles.addButtonText}>＋</CustomText>
           </TouchableOpacity>
         </View>
 
@@ -139,31 +124,10 @@ const TodoScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderTodo}
         />
-
       </View>
 
-      <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <TextInput
-              placeholder="Enter task"
-              value={text}
-              onChangeText={(text) => dispatch(setText(text))}
-              style={styles.input}
-            />
-            {/* <Button title="Add Task" onPress={handleAdd} /> */}
-            {/* <Button title={isEditing ? "Update Task" : "Add Task"} onPress={handleSave} /> */}
+      <CustomModal onSave={handleSave} />
 
-            <CustomButton
-              isEditing={isEditing}
-              onPress={handleSave}
-            />
-            <TouchableOpacity onPress={() => [dispatch(setModalVisible(false)), dispatch(setIsEditing(false))]}>
-              <Text style={{ marginTop: 10, textAlign: "center", color: Colors.gray }}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
