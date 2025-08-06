@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
-
+import { View, FlatList, TouchableOpacity, SafeAreaView, StatusBar, } from "react-native";
 
 import { useEffect } from "react";
 import { fetchTodos } from "../redux/slices/todoSlice";
-
 
 //import { useAppSelector, useDispatch } from "react-redux";
 import { useAppDispatch, useAppSelector } from '../redux';
@@ -87,7 +78,7 @@ const TodoScreen = () => {
           <CustomText
             style={[
               styles.todoText,
-              item.completed ? styles.todoTextCompleted : null ,
+              item.completed ? styles.todoTextCompleted : null,
             ]}
           >
             {item.title}

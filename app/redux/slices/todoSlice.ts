@@ -12,11 +12,11 @@ export const fetchTodos = createAsyncThunk<Todo[]>(
   "todo/fetchTodos",
   async () => {
     const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10');
-    return response.data.map((todo: any) => ({
+    return response.data?.map((todo: any) => ({
       id: String(todo.id),
       title: todo.title,
       completed: todo.completed,
-    }));
+    })) ?? [];
   }
 );
 
