@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
 import { hp,wp,fp } from "../utils/helpers";
+import Colors from "../constants/colors";
 
 const styles = StyleSheet.create({
   addButton: {
     position: "absolute",
     top: hp(0.2),
     right: wp(5),
-    backgroundColor: "#007bff",
+    backgroundColor: Colors.primary,
     width: wp(10),
     height: wp(10),
     borderRadius: wp(5),
@@ -22,13 +23,13 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
-    backgroundColor: "#000000aa",
+    backgroundColor: Colors.modalBackdrop,
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     width: wp(80),
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     padding: wp(5),
     borderRadius: wp(3),
     elevation: 10,

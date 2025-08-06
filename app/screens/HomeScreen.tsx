@@ -26,6 +26,7 @@ import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../styles/globalStyles";
 import  CustomButton  from "../components/CustomButton";
+import Colors from "../constants/colors";
 
 
 const TodoScreen = () => {
@@ -76,7 +77,7 @@ const TodoScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View style={{ flex: 1, padding: 20, paddingTop: 60 }}>
@@ -100,7 +101,7 @@ const TodoScreen = () => {
                 padding: 21,
                 alignItems: "center",
                 marginVertical: 9,
-                backgroundColor: item.completed ? "#d4edda" : "#f8d7da",
+                backgroundColor: item.completed ? Colors.lightGreenBg : Colors.lightRedBg,
                 borderRadius: 8,
               }}
             >
@@ -128,7 +129,7 @@ const TodoScreen = () => {
                   <MaterialCommunityIcons name="pencil" size={23} color="blue" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => dispatch(deleteTodo(item.id))}>
-                  <MaterialCommunityIcons name="delete" size={23} color="red" />
+                  <MaterialCommunityIcons name="delete" size={23} color= "red" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -155,7 +156,7 @@ const TodoScreen = () => {
               onPress={handleSave}
             />
             <TouchableOpacity onPress={() => [dispatch(setModalVisible(false)),dispatch(setIsEditing(false))]}>
-              <Text style={{ marginTop: 10, textAlign: "center", color: "gray" }}>Cancel</Text>
+              <Text style={{ marginTop: 10, textAlign: "center", color: Colors.gray }}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>

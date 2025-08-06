@@ -3,6 +3,9 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { hp,wp,fp } from '../utils/helpers';
+import Colors from '../constants/colors';
+
+
 type Props = {
   isEditing: boolean;
   onPress: () => void;
@@ -22,7 +25,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007BFF', 
+    backgroundColor: Colors.primary, 
     paddingVertical: hp(1.5),
     paddingHorizontal: wp(26),
     borderRadius: wp(2),
@@ -32,7 +35,7 @@ const styles = StyleSheet.create({
     marginTop: hp(0.1),
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontSize: fp(2),
     fontWeight: '600',
   },
