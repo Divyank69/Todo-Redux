@@ -11,6 +11,7 @@ import {
   StatusBar,
 } from "react-native";
 
+
 import { useEffect } from "react";
 import { fetchTodos } from "../redux/slices/todoSlice";
 
@@ -24,6 +25,7 @@ import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../styles/globalStyles";
+import  CustomButton  from "../components/CustomButton";
 
 
 const TodoScreen = () => {
@@ -146,9 +148,13 @@ const TodoScreen = () => {
               style={styles.input}
             />
             {/* <Button title="Add Task" onPress={handleAdd} /> */}
-            <Button title={isEditing ? "Update Task" : "Add Task"} onPress={handleSave} />
+            {/* <Button title={isEditing ? "Update Task" : "Add Task"} onPress={handleSave} /> */}
 
-            <TouchableOpacity onPress={() => dispatch(setModalVisible(false))}>
+            <CustomButton
+              isEditing={isEditing}
+              onPress={handleSave}
+            />
+            <TouchableOpacity onPress={() => [dispatch(setModalVisible(false)),dispatch(setIsEditing(false))]}>
               <Text style={{ marginTop: 10, textAlign: "center", color: "gray" }}>Cancel</Text>
             </TouchableOpacity>
           </View>
