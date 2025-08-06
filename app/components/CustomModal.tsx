@@ -5,17 +5,16 @@ import Colors from "../constants/colors";
 import CustomButton from "./CustomButton";
 import { useAppDispatch, useAppSelector } from "../redux";
 import { RootState } from "../redux";
-import {setModalVisible,setIsEditing,setText,} from "../redux/slices/uiSlice";
+import {setModalVisible,setIsEditing,setText,} from "../redux/slices/screenStateSlice";
 
 type Props = {
     onSave: () => void;
 };
 
 const CustomModal = ({ onSave }: Props) => {
+
     const dispatch = useAppDispatch();
-    const text = useAppSelector((state: RootState) => state.ui.text);
-    const modalVisible = useAppSelector((state: RootState) => state.ui.modalVisible);
-    const isEditing = useAppSelector((state: RootState) => state.ui.isEditing);
+    const{text,modalVisible,isEditing} = useAppSelector((state: RootState) => state.screenState);
 
     return (
         <Modal visible={modalVisible} animationType="slide" transparent>
@@ -27,12 +26,8 @@ const CustomModal = ({ onSave }: Props) => {
                         onChangeText={(t) => dispatch(setText(t))}
                         style={styles.input}
                     />
-
-                    <CustomButton
-                        isEditing={isEditing}
-                        onPress={onSave}
-                    />
-
+                    <CustomButton isEditing={isEditing} onPress={onSave}/>
+                    
                     <TouchableOpacity onPress={() => { dispatch(setModalVisible(false)); dispatch(setIsEditing(false));}} >
                         <Text style={{ marginTop: 10, textAlign: "center", color: Colors.gray }}>
                             Cancel

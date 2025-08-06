@@ -1,12 +1,7 @@
 import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Todo, TodoState } from "../types/todoTypes"; // path adjust karna
 
-export type Todo = {
-  
-  id: string;
-  title: string;
-  completed: boolean;
-};
 
 export const fetchTodos = createAsyncThunk<Todo[]>(
   "todo/fetchTodos",
@@ -20,11 +15,6 @@ export const fetchTodos = createAsyncThunk<Todo[]>(
   }
 );
 
-type TodoState = {
-  todos: Todo[];
-  loading: boolean;
-  error: string | null;
-};
 
 // const initialState: TodoState = {
 //   todos: [
@@ -52,7 +42,7 @@ type TodoState = {
 // };
 
 const initialState: TodoState = {
-  todos: [],          // 🔄 remove static todos, since API se aayenge
+  todos: [],          
   loading: false,
   error: null,
 };

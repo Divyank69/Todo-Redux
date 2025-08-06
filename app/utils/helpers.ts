@@ -1,4 +1,9 @@
-export const generateId = () => Date.now().toString();
+import moment from 'moment';
+
+// export const generateId = () => Date.now().toString();
+
+
+export const generateId = () => moment().format("YYYYMMDDHHmmssSSS");
 
 
 import {

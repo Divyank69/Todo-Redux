@@ -1,10 +1,7 @@
-
-
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { hp,wp,fp } from '../utils/helpers';
 import Colors from '../constants/colors';
-
 
 type Props = {
   isEditing: boolean;

@@ -14,8 +14,8 @@ const initialState: UIState = {
   editingId: null,
 };
 
-const uiSlice = createSlice({
-  name: "ui",
+const screenStateSlice = createSlice({
+  name: "screenState",
   initialState,
   reducers: {
     setText: (state, action: PayloadAction<string>) => {
@@ -45,6 +45,6 @@ export const {
   setIsEditing,
   setEditingId,
   resetUIState
-} = uiSlice.actions;
+} = screenStateSlice.actions;
 
-export default uiSlice.reducer;
+export default screenStateSlice.reducer;

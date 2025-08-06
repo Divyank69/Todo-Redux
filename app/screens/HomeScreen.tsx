@@ -1,32 +1,23 @@
 import React from "react";
 import { View, FlatList, TouchableOpacity, SafeAreaView, StatusBar, } from "react-native";
-
 import { useEffect } from "react";
-import { fetchTodos } from "../redux/slices/todoSlice";
-
-//import { useAppSelector, useDispatch } from "react-redux";
+import { fetchTodos } from "../redux/slices";
 import { useAppDispatch, useAppSelector } from '../redux';
 import { RootState } from "../redux";
-import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices/todoSlice";
-import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices/uiSlice";
+import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices";
+import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices";
 import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "../styles/globalStyles";
-//import CustomButton from "../components/CustomButton";
 import Colors from "../constants/colors";
-import CustomModal from "../components/CustomModal";
-import CustomText from "../components/CustomText";
-
+import { CustomModal, CustomText } from "../components";
 
 const TodoScreen = () => {
 
   const dispatch = useAppDispatch();
-  const text = useAppSelector((state: RootState) => state.ui.text);
-  const isEditing = useAppSelector((state: RootState) => state.ui.isEditing);
-  const editingId = useAppSelector((state: RootState) => state.ui.editingId);
 
-  //const todos = useAppSelector((state: RootState) => state.todo.todos);
+  const { text, isEditing, editingId } = useAppSelector((state: RootState) => state.screenState);
   const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
 
   const isDarkMode = useColorScheme() === "dark";
@@ -96,6 +87,8 @@ const TodoScreen = () => {
       </View>
     )
   }
+ 
+
 
   return (
     <SafeAreaView style={styles.safeareview}>

@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import todoReducer from './slices/todoSlice'
-import uiReducer from "./slices/uiSlice"
+import { todoReducer,screenStateReducer } from "./slices";
 
 export const store =configureStore({
     reducer: {
        todo:todoReducer,
-       ui: uiReducer
+       screenState: screenStateReducer
     },
     
 });
