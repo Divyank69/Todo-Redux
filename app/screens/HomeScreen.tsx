@@ -1,5 +1,7 @@
 import React from "react";
-import { View, FlatList, TouchableOpacity, SafeAreaView, StatusBar, } from "react-native";
+import { View, FlatList, TouchableOpacity, StatusBar, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useEffect } from "react";
 import { fetchTodos } from "../redux/slices";
 import { useAppDispatch, useAppSelector } from '../redux';
@@ -100,7 +102,7 @@ const TodoScreen = () => {
   }
  
   return (
-    <SafeAreaView style={styles.safeareview}>
+    <SafeAreaView style={styles.safeareview} edges={['left', 'right']}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View style={styles.header}>
