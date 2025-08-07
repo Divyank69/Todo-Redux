@@ -13,9 +13,16 @@ import styles from "../styles/globalStyles";
 import Colors from "../constants/colors";
 import { CustomModal, CustomText } from "../components";
 
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation/AppNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+
+
 const TodoScreen = () => {
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { text, isEditing, editingId } = useAppSelector((state: RootState) => state.screenState);
   const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
@@ -67,6 +74,10 @@ const TodoScreen = () => {
             />
           </TouchableOpacity>
           <CustomText
+           onPress={() => navigation.navigate("TaskDetail", { title: item.title,completed: item.completed })}
+
+          numberOfLines={1}
+          ellipsizeMode="tail"
             style={[
               styles.todoText,
               item.completed ? styles.todoTextCompleted : null,
@@ -88,8 +99,6 @@ const TodoScreen = () => {
     )
   }
  
-
-
   return (
     <SafeAreaView style={styles.safeareview}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
@@ -97,7 +106,6 @@ const TodoScreen = () => {
       <View style={styles.header}>
         <View style={styles.todaystask}>
           <CustomText style={styles.todaystasktext}> Today's Tasks</CustomText>
-
           <TouchableOpacity style={[styles.addButton, styles.addButtonWrapper]} onPress={() => dispatch(setModalVisible(true))}>
             <CustomText style={styles.addButtonText}>＋</CustomText>
           </TouchableOpacity>
