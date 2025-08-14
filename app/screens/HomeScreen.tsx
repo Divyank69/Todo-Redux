@@ -1,12 +1,12 @@
 import React from "react";
-import { View, FlatList, TouchableOpacity, StatusBar, } from "react-native";
+import { View, FlatList, TouchableOpacity, StatusBar, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useEffect } from "react";
 import { fetchTodos } from "../redux/slices";
 import { useAppDispatch, useAppSelector } from '../redux';
 import { RootState } from "../redux";
-import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices";
+import { addTodo, editTodo, toggleTodo, deleteTodo, Todo, setSearchText } from "../redux/slices";
 import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices";
 import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
@@ -27,12 +27,16 @@ const TodoScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { text, isEditing, editingId } = useAppSelector((state: RootState) => state.screenState);
-  const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
+  const { todos, searchText, loading, error } = useAppSelector((state: RootState) => state.todo);
 
   const isDarkMode = useColorScheme() === "dark";
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
+
+  const filteredTodos = todos.filter((todo) =>
+    todo.title.toLowerCase().includes(searchText.toLowerCase())
+  );
 
 
   const handleSave = () => {
@@ -76,10 +80,10 @@ const TodoScreen = () => {
             />
           </TouchableOpacity>
           <CustomText
-           onPress={() => navigation.navigate("TaskDetail", { title: item.title,completed: item.completed })}
+            onPress={() => navigation.navigate("TaskDetail", { title: item.title, completed: item.completed })}
 
-          numberOfLines={1}
-          ellipsizeMode="tail"
+            numberOfLines={1}
+            ellipsizeMode="tail"
             style={[
               styles.todoText,
               item.completed ? styles.todoTextCompleted : null,
@@ -100,7 +104,7 @@ const TodoScreen = () => {
       </View>
     )
   }
- 
+
   return (
     <SafeAreaView style={styles.safeareview} edges={['left', 'right']}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
@@ -113,15 +117,21 @@ const TodoScreen = () => {
           </TouchableOpacity>
         </View>
 
+        <TextInput
+          placeholder="Search..."
+          value={searchText}
+          onChangeText={(text) => dispatch(setSearchText(text))}
+          style={styles.inputsearch}
+        />
+
         <FlatList
-          data={todos}
+          data={filteredTodos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderTodo}
         />
       </View>
 
       <CustomModal onSave={handleSave} />
-
     </SafeAreaView>
   );
 };

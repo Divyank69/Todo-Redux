@@ -6,7 +6,7 @@ import { Todo, TodoState } from "../types/todoTypes"; // path adjust karna
 export const fetchTodos = createAsyncThunk<Todo[]>(
   "todo/fetchTodos",
   async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10');
+    const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5');
     return response.data?.map((todo: any) => ({
       id: String(todo.id),
       title: todo.title,
@@ -45,6 +45,7 @@ const initialState: TodoState = {
   todos: [],          
   loading: false,
   error: null,
+  searchText: "",
 };
 
 const todoSlice = createSlice({
@@ -70,6 +71,9 @@ const todoSlice = createSlice({
     deleteTodo: (state, action: PayloadAction<string>) => {
       state.todos = state.todos.filter((t) => t.id !== action.payload);
     },
+    setSearchText: (state, action: PayloadAction<string>) => {
+    state.searchText = action.payload;
+  },
   },
 extraReducers: (builder) => {
     builder
@@ -89,6 +93,6 @@ extraReducers: (builder) => {
 
 });
 
-export const { addTodo, editTodo, toggleTodo, deleteTodo } = todoSlice.actions;
+export const { addTodo, editTodo, toggleTodo, deleteTodo,setSearchText } = todoSlice.actions;
 export default todoSlice.reducer;
 
