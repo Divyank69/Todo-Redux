@@ -19,9 +19,14 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+type Props = {
+  filter?: "all" | "pending" | "completed"; 
+  showAddButton?: boolean; 
+  heading?: string;
+};
 
 
-const TodoScreen = () => {
+const TodoScreen = ({filter = "all", showAddButton = true, heading = "Today's Tasks" }: Props) => {
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -34,9 +39,15 @@ const TodoScreen = () => {
     dispatch(fetchTodos());
   }, [dispatch]);
 
-  const filteredTodos = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(searchText.toLowerCase())
-  );
+ const filteredTodos = todos.filter(todo => {
+  const matchesSearch = todo.title.toLowerCase().includes(searchText.toLowerCase());
+
+  if (!filter || filter === "all") return matchesSearch;
+  if (filter === "pending") return matchesSearch && !todo.completed;
+  if (filter === "completed") return matchesSearch && todo.completed;
+
+  return matchesSearch;
+});
 
 
   const handleSave = () => {
@@ -105,16 +116,26 @@ const TodoScreen = () => {
     )
   }
 
+  if (loading) {
+  return (
+    <SafeAreaView style={styles.safeareview}>
+      <CustomText>Loading Todos...</CustomText>
+    </SafeAreaView>
+  );
+}
+
   return (
     <SafeAreaView style={styles.safeareview} edges={['left', 'right']}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View style={styles.header}>
         <View style={styles.todaystask}>
-          <CustomText style={styles.todaystasktext}> Today's Tasks</CustomText>
+          <CustomText style={styles.todaystasktext}>{heading}</CustomText>
+          { showAddButton &&
           <TouchableOpacity style={[styles.addButton, styles.addButtonWrapper]} onPress={() => dispatch(setModalVisible(true))}>
             <CustomText style={styles.addButtonText}>＋</CustomText>
           </TouchableOpacity>
+          }
         </View>
 
         <TextInput

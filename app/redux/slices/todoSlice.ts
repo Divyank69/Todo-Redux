@@ -1,45 +1,20 @@
 import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Todo, TodoState } from "../types/todoTypes"; // path adjust karna
+import { Todo, TodoState } from "../types/todoTypes"; 
 
 
 export const fetchTodos = createAsyncThunk<Todo[]>(
   "todo/fetchTodos",
   async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5');
+     const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5');
+    console.log("API Response:", response.data);
     return response.data?.map((todo: any) => ({
       id: String(todo.id),
       title: todo.title,
       completed: todo.completed,
-    })) ?? [];
+    })) ;
   }
 );
-
-
-// const initialState: TodoState = {
-//   todos: [
-//     {
-//       id: "1",
-//       title: "Buy groceries",
-//       completed: false,
-//     },
-//     {
-//       id: "2",
-//       title: "Go for a walk",
-//       completed: true,
-//     },
-//     {
-//       id: "3",
-//       title: "Learn Redux Toolkit",
-//       completed: false,
-//     },
-//     {
-//       id: "4",
-//       title: "Drink water",
-//       completed: false,
-//     },
-//   ]
-// };
 
 const initialState: TodoState = {
   todos: [],          
