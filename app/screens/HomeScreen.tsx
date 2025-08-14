@@ -1,10 +1,12 @@
 import React from "react";
-import { View, FlatList, TouchableOpacity, SafeAreaView, StatusBar, } from "react-native";
+import { View, FlatList, TouchableOpacity, StatusBar, TextInput } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useEffect } from "react";
 import { fetchTodos } from "../redux/slices";
 import { useAppDispatch, useAppSelector } from '../redux';
 import { RootState } from "../redux";
-import { addTodo, editTodo, toggleTodo, deleteTodo, Todo } from "../redux/slices";
+import { addTodo, editTodo, toggleTodo, deleteTodo, Todo, setSearchText } from "../redux/slices";
 import { setText, setModalVisible, setIsEditing, setEditingId, resetUIState, } from "../redux/slices";
 import { generateId } from "../utils/helpers";
 import { useColorScheme } from "react-native";
@@ -13,17 +15,39 @@ import styles from "../styles/globalStyles";
 import Colors from "../constants/colors";
 import { CustomModal, CustomText } from "../components";
 
-const TodoScreen = () => {
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation/AppNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type Props = {
+  filter?: "all" | "pending" | "completed"; 
+  showAddButton?: boolean; 
+  heading?: string;
+};
+
+
+const TodoScreen = ({filter = "all", showAddButton = true, heading = "Today's Tasks" }: Props) => {
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { text, isEditing, editingId } = useAppSelector((state: RootState) => state.screenState);
-  const { todos, loading, error } = useAppSelector((state: RootState) => state.todo);
+  const { todos, searchText, loading, error } = useAppSelector((state: RootState) => state.todo);
 
   const isDarkMode = useColorScheme() === "dark";
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
+
+ const filteredTodos = todos.filter(todo => {
+  const matchesSearch = todo.title.toLowerCase().includes(searchText.toLowerCase());
+
+  if (!filter || filter === "all") return matchesSearch;
+  if (filter === "pending") return matchesSearch && !todo.completed;
+  if (filter === "completed") return matchesSearch && todo.completed;
+
+  return matchesSearch;
+});
 
 
   const handleSave = () => {
@@ -67,6 +91,10 @@ const TodoScreen = () => {
             />
           </TouchableOpacity>
           <CustomText
+            onPress={() => navigation.navigate("TaskDetail", { title: item.title, completed: item.completed })}
+
+            numberOfLines={1}
+            ellipsizeMode="tail"
             style={[
               styles.todoText,
               item.completed ? styles.todoTextCompleted : null,
@@ -87,31 +115,44 @@ const TodoScreen = () => {
       </View>
     )
   }
- 
 
-
+  if (loading) {
   return (
     <SafeAreaView style={styles.safeareview}>
+      <CustomText>Loading Todos...</CustomText>
+    </SafeAreaView>
+  );
+}
+
+  return (
+    <SafeAreaView style={styles.safeareview} edges={['left', 'right']}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View style={styles.header}>
         <View style={styles.todaystask}>
-          <CustomText style={styles.todaystasktext}> Today's Tasks</CustomText>
-
+          <CustomText style={styles.todaystasktext}>{heading}</CustomText>
+          { showAddButton &&
           <TouchableOpacity style={[styles.addButton, styles.addButtonWrapper]} onPress={() => dispatch(setModalVisible(true))}>
             <CustomText style={styles.addButtonText}>＋</CustomText>
           </TouchableOpacity>
+          }
         </View>
 
+        <TextInput
+          placeholder="Search..."
+          value={searchText}
+          onChangeText={(text) => dispatch(setSearchText(text))}
+          style={styles.inputsearch}
+        />
+
         <FlatList
-          data={todos}
+          data={filteredTodos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderTodo}
         />
       </View>
 
       <CustomModal onSave={handleSave} />
-
     </SafeAreaView>
   );
 };

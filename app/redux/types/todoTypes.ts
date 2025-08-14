@@ -8,4 +8,6 @@ export type TodoState = {
   todos: Todo[];
   loading: boolean;
   error: string | null;
+  searchText: string;
 };
+
